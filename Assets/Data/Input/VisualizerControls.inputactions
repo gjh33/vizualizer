@@ -1,0 +1,54 @@
+{
+    "name": "VisualizerControls",
+    "maps": [
+        {
+            "name": "ModelManipulation",
+            "id": "670e2e66-5e62-4ad8-bb98-4206ab587405",
+            "actions": [
+                {
+                    "name": "MoveDrag",
+                    "type": "Value",
+                    "id": "b83345b2-8e85-4dc3-9176-c4ce8c3b3b5b",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "DragActive",
+                    "type": "Value",
+                    "id": "69450ceb-31a8-4f83-9a54-03ebc0e2c0e7",
+                    "expectedControlType": "Button",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                }
+            ],
+            "bindings": [
+                {
+                    "name": "",
+                    "id": "7e841f84-56f5-48bb-818c-04aeebe29cee",
+                    "path": "<Pointer>/delta",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "MoveDrag",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1976be33-3273-400b-8851-77fdddd7b1c6",
+                    "path": "<Pointer>/press",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "DragActive",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                }
+            ]
+        }
+    ],
+    "controlSchemes": []
+}
