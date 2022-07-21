@@ -17,6 +17,7 @@ public class VisualInterfaceController : UIController
     private const string translateControlId = "translate-control";
     private const string rotateControlId = "rotate-control";
     private const string scaleControlId = "scale-control";
+    private const string lightControlId = "light-control";
     private const string translateAxisId = "translate-axis";
     private const string rotationAxisId = "rotation-axis";
     private const string scaleAxisId = "scale-axis";
@@ -26,6 +27,9 @@ public class VisualInterfaceController : UIController
     private const string yControlId = "y-control";
     private const string zControlId = "z-control";
     private const string uniformControlId = "uniform-control";
+    private const string lightingControlsId = "lighting-controls";
+    private const string temperatureSliderId = "temperature-slider";
+    private const string angleSliderId = "angle-slider";
 
     private const string controlSelectedClass = "selected";
     
@@ -38,10 +42,8 @@ public class VisualInterfaceController : UIController
     public Action<DisplayMesh.RotationAxis> OnRotationAxisChanged;
     public Action<DisplayMesh.ScaleAxis> OnScaleAxisChanged;
 
-    public Action<bool> OnPickerVisibilityChanged;
-    
-    private VisualTreeAsset carouselCardTemplate;
-    private PickerController picker;
+    public Action<float> OnTemperatureSliderChanged;
+    public Action<float> OnAngleSliderChanged;
 
     private Button selectMeshButton;
     private Button selectMaterialButton;
@@ -49,6 +51,7 @@ public class VisualInterfaceController : UIController
     private Button translateControl;
     private Button rotateControl;
     private Button scaleControl;
+    private Button lightControl;
     private Button translateXZControl;
     private Button translateXYControl;
     private Button rotateXControl;
@@ -62,6 +65,12 @@ public class VisualInterfaceController : UIController
     private VisualElement translateAxis;
     private VisualElement rotateAxis;
     private VisualElement scaleAxis;
+    private VisualElement lightingControls;
+    
+    private VisualTreeAsset carouselCardTemplate;
+    private PickerController picker;
+    private VerticalSliderController temperatureSlider;
+    private VerticalSliderController angleSlider;
     
     public VisualInterfaceController(VisualElement rootElement, VisualTreeAsset cardTemplate) : base(rootElement)
     {
@@ -71,24 +80,12 @@ public class VisualInterfaceController : UIController
         picker.OnMeshSelected += OnPickerMeshSelected;
         picker.OnMaterialSelected += OnPickerMaterialSelected;
         picker.OnTextureSelected += OnPickerTextureSelected;
-    }
-
-    private void OnPickerTextureSelected(Texture2D tex)
-    {
-        OnTextureSelected?.Invoke(tex);
-        OnPickerVisibilityChanged?.Invoke(false);
-    }
-
-    private void OnPickerMaterialSelected(Material mat)
-    {
-        OnMaterialSelected?.Invoke(mat);
-        OnPickerVisibilityChanged?.Invoke(false);
-    }
-
-    private void OnPickerMeshSelected(Mesh mesh)
-    {
-        OnMeshSelected?.Invoke(mesh);
-        OnPickerVisibilityChanged?.Invoke(false);
+        
+        temperatureSlider = new VerticalSliderController(root.Q<VisualElement>(temperatureSliderId));
+        temperatureSlider.OnValueChanged += OnTemperatureSliderValueChanged;
+        
+        angleSlider = new VerticalSliderController(root.Q<VisualElement>(angleSliderId));
+        angleSlider.OnValueChanged += OnAngleSliderValueChanged;
     }
 
     public void Update()
@@ -101,10 +98,12 @@ public class VisualInterfaceController : UIController
         translateControl.AddToClassList(controlSelectedClass);
         rotateControl.RemoveFromClassList(controlSelectedClass);
         scaleControl.RemoveFromClassList(controlSelectedClass);
+        lightControl.RemoveFromClassList(controlSelectedClass);
         OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.Translate);
         scaleAxis.style.display = DisplayStyle.None;
         translateAxis.style.display = DisplayStyle.Flex;
         rotateAxis.style.display = DisplayStyle.None;
+        lightingControls.style.display = DisplayStyle.None;
     }
     
     public void SelectRotateControl()
@@ -112,10 +111,12 @@ public class VisualInterfaceController : UIController
         translateControl.RemoveFromClassList(controlSelectedClass);
         rotateControl.AddToClassList(controlSelectedClass);
         scaleControl.RemoveFromClassList(controlSelectedClass);
+        lightControl.RemoveFromClassList(controlSelectedClass);
         OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.Rotate);
         scaleAxis.style.display = DisplayStyle.None;
         translateAxis.style.display = DisplayStyle.None;
         rotateAxis.style.display = DisplayStyle.Flex;
+        lightingControls.style.display = DisplayStyle.None;
     }
     
     public void SelectScaleControl()
@@ -123,10 +124,25 @@ public class VisualInterfaceController : UIController
         translateControl.RemoveFromClassList(controlSelectedClass);
         rotateControl.RemoveFromClassList(controlSelectedClass);
         scaleControl.AddToClassList(controlSelectedClass);
+        lightControl.RemoveFromClassList(controlSelectedClass);
         OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.Scale);
         scaleAxis.style.display = DisplayStyle.Flex;
         translateAxis.style.display = DisplayStyle.None;
         rotateAxis.style.display = DisplayStyle.None;
+        lightingControls.style.display = DisplayStyle.None;
+    }
+    
+    public void SelectLightControl()
+    {
+        lightControl.AddToClassList(controlSelectedClass);
+        translateControl.RemoveFromClassList(controlSelectedClass);
+        rotateControl.RemoveFromClassList(controlSelectedClass);
+        scaleControl.RemoveFromClassList(controlSelectedClass);
+        OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.None);
+        scaleAxis.style.display = DisplayStyle.None;
+        translateAxis.style.display = DisplayStyle.None;
+        rotateAxis.style.display = DisplayStyle.None;
+        lightingControls.style.display = DisplayStyle.Flex;
     }
     
     public void SelectTranslateXZControl()
@@ -202,6 +218,16 @@ public class VisualInterfaceController : UIController
         scaleUniformControl.AddToClassList(controlSelectedClass);
         OnScaleAxisChanged?.Invoke(DisplayMesh.ScaleAxis.Uniform);
     }
+    
+    public void SetLightTemperature(float temperature)
+    {
+        temperatureSlider.Value = temperature;
+    }
+    
+    public void SetLightAngle(float angle)
+    {
+        angleSlider.Value = angle;
+    }
 
     protected override void CollectElements()
     {
@@ -213,10 +239,12 @@ public class VisualInterfaceController : UIController
         translateControl = root.Q<Button>(translateControlId);
         rotateControl = root.Q<Button>(rotateControlId);
         scaleControl = root.Q<Button>(scaleControlId);
+        lightControl = root.Q<Button>(lightControlId);
         
         translateAxis = root.Q<VisualElement>(translateAxisId);
         rotateAxis = root.Q<VisualElement>(rotationAxisId);
         scaleAxis = root.Q<VisualElement>(scaleAxisId);
+        lightingControls = root.Q<VisualElement>(lightingControlsId);
         
         translateXZControl = translateAxis.Q<Button>(xzControlId);
         translateXYControl = translateAxis.Q<Button>(xyControlId);
@@ -239,6 +267,7 @@ public class VisualInterfaceController : UIController
         translateControl.clickable.clicked += OnTranslateControlClicked;
         rotateControl.clickable.clicked += OnRotateControlClicked;
         scaleControl.clickable.clicked += OnScaleControlClicked;
+        lightControl.clickable.clicked += OnLightControlClicked;
         
         translateXYControl.clickable.clicked += OnTranslateXYControlClicked;
         translateXZControl.clickable.clicked += OnTranslateXZControlClicked;
@@ -249,6 +278,31 @@ public class VisualInterfaceController : UIController
         scaleYControl.clickable.clicked += OnScaleYControlClicked;
         scaleZControl.clickable.clicked += OnScaleZControlClicked;
         scaleUniformControl.clickable.clicked += OnScaleUniformControlClicked;
+    }
+
+    private void OnAngleSliderValueChanged(float angle)
+    {
+        OnAngleSliderChanged?.Invoke(angle);
+    }
+
+    private void OnTemperatureSliderValueChanged(float temp)
+    {
+        OnTemperatureSliderChanged?.Invoke(temp);
+    }
+
+    private void OnPickerTextureSelected(Texture2D tex)
+    {
+        OnTextureSelected?.Invoke(tex);
+    }
+
+    private void OnPickerMaterialSelected(Material mat)
+    {
+        OnMaterialSelected?.Invoke(mat);
+    }
+
+    private void OnPickerMeshSelected(Mesh mesh)
+    {
+        OnMeshSelected?.Invoke(mesh);
     }
     
     private void OnTranslateXYControlClicked()
@@ -295,6 +349,11 @@ public class VisualInterfaceController : UIController
     {
         SelectScaleUniformControl();
     }
+
+    private void OnLightControlClicked()
+    {
+        SelectLightControl();
+    }
     
     private void OnScaleControlClicked()
     {
@@ -314,18 +373,15 @@ public class VisualInterfaceController : UIController
     private void OnSelectMeshButtonClicked()
     {
         picker.PickMesh();
-        OnPickerVisibilityChanged?.Invoke(true);
     }
 
     private void OnSelectMaterialButtonClicked()
     {
         picker.PickMaterial();
-        OnPickerVisibilityChanged?.Invoke(true);
     }
 
     private void OnSelectTextureButtonClicked()
     {
         picker.PickTexture();
-        OnPickerVisibilityChanged?.Invoke(true);
     }
 }

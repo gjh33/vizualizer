@@ -1,0 +1,65 @@
+:root {
+    --dark-primary-color: rgb(0, 121, 107);
+    --light-primary-color: rgb(178, 223, 219);
+    --primary-color: rgb(0, 150, 136);
+    --accent-color: rgb(3, 169, 244);
+    --text-icons-color: rgb(255, 255, 255);
+    --primary-text-color: rgb(33, 33, 33);
+    --secondary-text-color: rgb(117, 117, 117);
+    --divider-color: rgb(189, 189, 189);
+    color: var(--primary-text-color);
+}
+
+.angle-slider {
+    height: 100%;
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    align-items: center;
+    flex-direction: column-reverse;
+    width: 50px;
+}
+
+.angle-slider-inlet {
+    position: absolute;
+    top: 10px;
+    bottom: 10px;
+    width: 5px;
+    background-color: var(--light-primary-color);
+}
+
+.angle-slider-knob {
+    width: 50px;
+    height: 20px;
+    background-color: var(--text-icons-color);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+    bottom: 0;
+}
+
+.angle-slider-container {
+    top: 0;
+    bottom: 75px;
+    position: absolute;
+    align-items: center;
+    width: 30px;
+    background-color: var(--primary-color);
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    flex-direction: column-reverse;
+}
+
+.angle-slider-icon {
+    position: absolute;
+    bottom: 0;
+    height: 75px;
+    width: 75px;
+    background-color: var(--primary-color);
+    border-top-left-radius: 5px;
+    border-bottom-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-right-radius: 5px;
+}

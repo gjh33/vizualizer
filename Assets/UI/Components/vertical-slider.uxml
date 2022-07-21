@@ -1,0 +1,10 @@
+<ui:UXML xmlns:ui="UnityEngine.UIElements" xmlns:uie="UnityEditor.UIElements" editor-extension-mode="False">
+    <Style src="project://database/Assets/UI/Components/vertical-slider.uss?fileID=7433441132597879392&amp;guid=33f65617e365ab84faab893b1d35f4df&amp;type=3#vertical-slider" />
+    <ui:VisualElement name="container" picking-mode="Ignore" class="angle-slider" style="width: 75px;">
+        <ui:VisualElement name="slide-container" class="angle-slider-container">
+            <ui:VisualElement name="track-inlet" class="angle-slider-inlet" />
+            <ui:VisualElement name="knob" class="angle-slider-knob" />
+        </ui:VisualElement>
+        <ui:VisualElement name="icon" class="angle-slider-icon" />
+    </ui:VisualElement>
+</ui:UXML>

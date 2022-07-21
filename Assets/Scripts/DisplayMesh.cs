@@ -2,13 +2,14 @@ using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.EventSystems;
 
 /// <summary>
 /// Displays a mesh with a material and texture.
 /// </summary>
 public class DisplayMesh : MonoBehaviour
 {
-    public enum ControlMode { Translate, Rotate, Scale };
+    public enum ControlMode { Translate, Rotate, Scale, None };
     public enum TranslationAxis { XY, XZ };
     public enum RotationAxis { X, Y, Z };
     public enum ScaleAxis { X, Y, Z, Uniform };
@@ -72,7 +73,7 @@ public class DisplayMesh : MonoBehaviour
 
     private void Update()
     {
-        if (!ControlsEnabled)
+        if (!ControlsEnabled || EventSystem.current.IsPointerOverGameObject())
         {
             dragging = false;
             return;

@@ -38,31 +38,6 @@
     background-color: var(--dark-primary-color);
 }
 
-.carousel-card {
-    background-color: var(--light-primary-color);
-    border-top-left-radius: 25px;
-    border-bottom-left-radius: 25px;
-    border-top-right-radius: 25px;
-    border-bottom-right-radius: 25px;
-    min-width: 500px;
-    min-height: 500px;
-    margin-left: 25px;
-    margin-right: 25px;
-    background-image: none;
-    -unity-background-scale-mode: scale-and-crop;
-}
-
-.carousel-card #carousel-title {
-    position: absolute;
-    left: 0;
-    top: -65px;
-    right: 0;
-    font-size: 40px;
-    -unity-text-align: upper-center;
-    color: var(--text-icons-color);
-    -unity-font-style: bold;
-}
-
 .title {
     font-size: 72px;
     position: absolute;
@@ -97,4 +72,36 @@
     background-color: var(--light-primary-color);
     -unity-background-image-tint-color: var(--primary-text-color);
     color: var(--primary-text-color);
+}
+
+.close-button {
+    position: absolute;
+    top: 25px;
+    right: 25px;
+    width: 75px;
+    height: 75px;
+    border-left-color: rgba(149, 149, 149, 0);
+    border-right-color: rgba(149, 149, 149, 0);
+    border-top-color: rgba(149, 149, 149, 0);
+    border-bottom-color: rgba(149, 149, 149, 0);
+    border-top-left-radius: 10px;
+    border-bottom-left-radius: 10px;
+    border-top-right-radius: 10px;
+    border-bottom-right-radius: 10px;
+    font-size: 50px;
+    -unity-font-style: bold;
+    background-color: var(--light-primary-color);
+}
+
+.angle-slider {
+    margin-left: 15px;
+    margin-right: 15px;
+}
+
+#temperature-slider #icon {
+    background-image: url('project://database/Assets/UI/Icons/icons8-temperature-50.png?fileID=2800000&guid=5b12c30775f569e4d9b2b1504886db10&type=3#icons8-temperature-50');
+}
+
+#angle-slider #icon {
+    background-image: url('project://database/Assets/UI/Icons/icons8-measurement-tool-64.png?fileID=2800000&guid=6d467ce02bbb58948bedebf823bd52c9&type=3#icons8-measurement-tool-64');
 }

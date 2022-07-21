@@ -499,7 +499,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 390904285}
   m_LocalRotation: {x: 0, y: 1, z: 0, w: 0}
-  m_LocalPosition: {x: 0, y: 0.96, z: 0}
+  m_LocalPosition: {x: 0, y: 1, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -601,7 +601,7 @@ Light:
   m_LightShadowCasterMode: 0
   m_AreaSize: {x: 1, y: 1}
   m_BounceIntensity: 1
-  m_ColorTemperature: 5500
+  m_ColorTemperature: 7247
   m_UseColorTemperature: 1
   m_BoundingSphereOverride: {x: 0, y: 0, z: 0, w: 0}
   m_UseBoundingSphereOverride: 0
@@ -758,6 +758,10 @@ MonoBehaviour:
   carouselCardTemplate: {fileID: 9197481963319205126, guid: fd630a37057fdd84ab35d53f76bed54f,
     type: 3}
   displayMesh: {fileID: 390904290}
+  MinLightTemperature: 0
+  MaxLightTemperature: 100
+  MinLightAngle: 0
+  MaxLightAngle: 360
 --- !u!1 &1491535318
 GameObject:
   m_ObjectHideFlags: 0

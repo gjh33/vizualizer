@@ -1,0 +1,40 @@
+:root {
+    --dark-primary-color: rgb(0, 121, 107);
+    --light-primary-color: rgb(178, 223, 219);
+    --primary-color: rgb(0, 150, 136);
+    --accent-color: rgb(3, 169, 244);
+    --text-icons-color: rgb(255, 255, 255);
+    --primary-text-color: rgb(33, 33, 33);
+    --secondary-text-color: rgb(117, 117, 117);
+    --divider-color: rgb(189, 189, 189);
+    color: var(--primary-text-color);
+}
+
+.carousel-card {
+    background-color: var(--light-primary-color);
+    border-top-left-radius: 25px;
+    border-bottom-left-radius: 25px;
+    border-top-right-radius: 25px;
+    border-bottom-right-radius: 25px;
+    min-width: 500px;
+    min-height: 500px;
+    margin-left: 25px;
+    margin-right: 25px;
+    background-image: none;
+    -unity-background-scale-mode: scale-and-crop;
+}
+
+.carousel-card #carousel-title {
+    position: absolute;
+    left: 0;
+    top: -10px;
+    right: 0;
+    font-size: 40px;
+    -unity-text-align: upper-center;
+    color: var(--text-icons-color);
+    -unity-font-style: bold;
+    padding-left: 25px;
+    padding-right: 25px;
+    translate: 0 -100%;
+    white-space: normal;
+}

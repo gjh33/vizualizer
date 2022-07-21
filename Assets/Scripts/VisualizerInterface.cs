@@ -12,6 +12,12 @@ public class VisualizerInterface : MonoBehaviour
     [SerializeField] private UIDocument userInterface;
     [SerializeField] private VisualTreeAsset carouselCardTemplate;
     [SerializeField] private DisplayMesh displayMesh;
+    
+    [SerializeField] private float MinLightTemperature = 1500f;
+    [SerializeField] private float MaxLightTemperature = 20000f;
+    
+    [SerializeField] private float MinLightAngle = 0.0f;
+    [SerializeField] private float MaxLightAngle = 180f;
 
     private VisualInterfaceController rootController;
 
@@ -41,12 +47,18 @@ public class VisualizerInterface : MonoBehaviour
         rootController.OnTranslationAxisChanged += OnTranslationAxisChanged;
         rootController.OnRotationAxisChanged += OnRotationAxisChanged;
         rootController.OnScaleAxisChanged += OnScaleAxisChanged;
-        rootController.OnPickerVisibilityChanged += OnPickerVisibilityChanged;
+        userInterface.rootVisualElement.RegisterCallback<PointerOverEvent>(OnPointerOver);
+        userInterface.rootVisualElement.RegisterCallback<PointerOutEvent>(OnPointerOut);
     }
 
-    private void OnPickerVisibilityChanged(bool visible)
+    private void OnPointerOver(PointerOverEvent evt)
     {
-        displayMesh.ControlsEnabled = !visible;
+        displayMesh.ControlsEnabled = false;
+    }
+
+    private void OnPointerOut(PointerOutEvent evt)
+    {
+        displayMesh.ControlsEnabled = true;
     }
 
     private void InitDefaults()

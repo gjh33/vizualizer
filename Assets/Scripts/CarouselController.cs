@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
@@ -115,32 +116,61 @@ public class CarouselController : UIController
         base.RegisterCallbacks();
         root.RegisterCallback<PointerDownEvent>(OnPointerDown);
         
-        // Register on root so it always detects drag and up regardless of mouse position
+        // Note: We can't capture the cursor so the user can still select a card
+        // So instead we register to the panel root which is screen wide
         root.panel.visualTree.RegisterCallback<PointerUpEvent>(OnPointerUp);
         root.panel.visualTree.RegisterCallback<PointerMoveEvent>(OnPointerMove);
+    }
+
+    private void OnPointerCaptureOut(PointerCaptureOutEvent evt)
+    {
+        if (dragging)
+        {
+            EndDrag();
+        }
     }
 
     private void OnPointerUp(PointerUpEvent evt)
     {
         if (dragging)
         {
-            dragging = false;
-            SnapToNearestIndex();
+            EndDrag();
         }
     }
 
     private void OnPointerMove(PointerMoveEvent evt)
     {
-        if (!dragging) return;
-        float newX = root.style.translate.value.x.value;
-        newX += evt.deltaPosition.x;
-        // So when we let go velocity continues into the damp
-        currentVelocity = evt.deltaPosition.x;
-        root.style.translate = new Translate(newX, 0, 0);
+        if (dragging)
+        {
+            OnDragMove(evt.deltaPosition);
+        }
     }
 
     private void OnPointerDown(PointerDownEvent evt)
     {
+        if (!dragging)
+        {
+            StartDrag();
+        }
+    }
+
+    private void StartDrag()
+    {
         dragging = true;
+    }
+
+    private void EndDrag()
+    {
+        dragging = false;
+        SnapToNearestIndex();
+    }
+
+    private void OnDragMove(Vector2 delta)
+    {
+        float newX = root.style.translate.value.x.value;
+        newX += delta.x;
+        // So when we let go velocity continues into the damp
+        currentVelocity = delta.x;
+        root.style.translate = new Translate(newX, 0, 0);
     }
 }
