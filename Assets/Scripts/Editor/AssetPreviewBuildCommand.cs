@@ -44,7 +44,6 @@ public class AssetPreviewBuildCommand
             outputPath += ".png";
             outputPath = Application.dataPath + "/" + outputPath;
             byte[] bytes = previewTexture.EncodeToPNG();
-            Debug.Log("Writing " + outputPath);
             File.WriteAllBytes(outputPath, bytes);
         }
     }

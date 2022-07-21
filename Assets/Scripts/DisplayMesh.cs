@@ -9,11 +9,22 @@ using UnityEngine;
 public class DisplayMesh : MonoBehaviour
 {
     public enum ControlMode { Translate, Rotate, Scale };
+    public enum TranslationAxis { XY, XZ };
+    public enum RotationAxis { X, Y, Z };
+    public enum ScaleAxis { X, Y, Z, Uniform };
     
     [SerializeField] private MeshFilter Filter;
     [SerializeField] private MeshRenderer Renderer;
+    [SerializeField] private float TranslationSensitivity = 0.01f;
+    [SerializeField] private float RotationSensitivity = 0.5f;
+    [SerializeField] private float ScaleSensitivity = 0.01f;
 
     public ControlMode CurrentControlMode = ControlMode.Translate;
+    public TranslationAxis CurrentTranslationAxis = TranslationAxis.XZ;
+    public RotationAxis CurrentRotationAxis = RotationAxis.Y;
+    public ScaleAxis CurrentScaleAxis = ScaleAxis.Uniform;
+
+    public bool ControlsEnabled = true;
     
     private VisualizerControls input;
     private bool dragging = false;
@@ -25,6 +36,9 @@ public class DisplayMesh : MonoBehaviour
     public void SetMesh(Mesh mesh)
     {
         Filter.mesh = mesh;
+        transform.localScale = Vector3.one;
+        transform.rotation = Quaternion.identity;
+        transform.position = Vector3.up;
     }
     
     /// <summary>
@@ -58,6 +72,12 @@ public class DisplayMesh : MonoBehaviour
 
     private void Update()
     {
+        if (!ControlsEnabled)
+        {
+            dragging = false;
+            return;
+        }
+        
         if (input.ModelManipulation.DragActive.WasPressedThisFrame())
         {
             dragging = true;
@@ -72,15 +92,52 @@ public class DisplayMesh : MonoBehaviour
             
             if (CurrentControlMode == ControlMode.Translate)
             {
-                transform.position += new Vector3(delta.x * 0.01f, 0, delta.y * 0.01f);
+                delta *= TranslationSensitivity;
+                if (CurrentTranslationAxis == TranslationAxis.XZ)
+                {
+                    transform.Translate(new Vector3(delta.x, 0, delta.y), Space.World);
+                }
+                else
+                {
+                    transform.Translate(new Vector3(delta.x, delta.y, 0), Space.World);
+                }
             }
             else if (CurrentControlMode == ControlMode.Rotate)
             {
-                transform.Rotate(new Vector3(delta.y * 0.5f, -delta.x * 0.5f, 0), Space.World);
+                delta *= RotationSensitivity;
+                if (CurrentRotationAxis == RotationAxis.X)
+                {
+                    transform.Rotate(new Vector3(delta.y, 0, 0), Space.World);
+                }
+                else if (CurrentRotationAxis == RotationAxis.Y)
+                {
+                    transform.Rotate(new Vector3(0, -delta.x, 0), Space.World);
+                }
+                else if (CurrentRotationAxis == RotationAxis.Z)
+                {
+                    transform.Rotate(new Vector3(0, 0, -delta.x), Space.World);
+                }
             }
             else if (CurrentControlMode == ControlMode.Scale)
             {
-                transform.localScale += Vector3.one * delta.y * 0.01f;
+                delta *= ScaleSensitivity;
+
+                if (CurrentScaleAxis == ScaleAxis.X)
+                {
+                    transform.localScale += Vector3.right * delta.y;
+                }
+                else if (CurrentScaleAxis == ScaleAxis.Y)
+                {
+                    transform.localScale += Vector3.up * delta.y;
+                }
+                else if (CurrentScaleAxis == ScaleAxis.Z)
+                {
+                    transform.localScale += Vector3.forward * delta.y;
+                }
+                else if (CurrentScaleAxis == ScaleAxis.Uniform)
+                {
+                    transform.localScale += Vector3.one * delta.y;
+                }
             }
         }
     }

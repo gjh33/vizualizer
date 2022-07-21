@@ -6,6 +6,26 @@
             <ui:Button text="Material" display-tooltip-when-elided="true" name="select-material-button" class="toolbar-control-button" />
             <ui:Button text="Texture" display-tooltip-when-elided="true" name="select-texture-button" class="toolbar-control-button" />
         </ui:VisualElement>
+        <ui:VisualElement name="controls" style="position: absolute; top: 250px; bottom: 250px; left: 50px; align-items: center;">
+            <ui:Button display-tooltip-when-elided="true" name="translate-control" class="control-button" style="background-image: url(&apos;project://database/Assets/UI/Icons/icons8-move-50.png?fileID=2800000&amp;guid=ee09cfc3fea35154c85dedaf28d2e587&amp;type=3#icons8-move-50&apos;);" />
+            <ui:Button display-tooltip-when-elided="true" name="rotate-control" class="control-button" style="background-image: url(&apos;project://database/Assets/UI/Icons/icons8-rotate-left-64.png?fileID=2800000&amp;guid=0a402d4b8e3fd33419a444ca05f9d9ab&amp;type=3#icons8-rotate-left-64&apos;);" />
+            <ui:Button display-tooltip-when-elided="true" name="scale-control" class="control-button" style="background-image: url(&apos;project://database/Assets/UI/Icons/icons8-resize-64.png?fileID=2800000&amp;guid=6059cd2d535596c42b36ed00336bd8bb&amp;type=3#icons8-resize-64&apos;);" />
+        </ui:VisualElement>
+        <ui:VisualElement name="translate-axis" style="position: absolute; top: 250px; bottom: 250px; align-items: center; right: 50px; display: none;">
+            <ui:Button display-tooltip-when-elided="true" name="xz-control" text="XZ" class="control-button selected" />
+            <ui:Button display-tooltip-when-elided="true" name="xy-control" text="XY" class="control-button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="rotation-axis" style="position: absolute; top: 250px; bottom: 250px; align-items: center; right: 50px; display: none;">
+            <ui:Button display-tooltip-when-elided="true" name="x-control" text="X" class="control-button selected" />
+            <ui:Button display-tooltip-when-elided="true" name="y-control" text="Y" class="control-button" />
+            <ui:Button display-tooltip-when-elided="true" name="z-control" text="Z" class="control-button" />
+        </ui:VisualElement>
+        <ui:VisualElement name="scale-axis" style="position: absolute; top: 250px; bottom: 250px; align-items: center; right: 50px; display: none;">
+            <ui:Button display-tooltip-when-elided="true" name="x-control" text="X" class="control-button selected" />
+            <ui:Button display-tooltip-when-elided="true" name="y-control" text="Y" class="control-button" />
+            <ui:Button display-tooltip-when-elided="true" name="z-control" text="Z" class="control-button" />
+            <ui:Button display-tooltip-when-elided="true" name="uniform-control" text="U" class="control-button" />
+        </ui:VisualElement>
     </ui:VisualElement>
     <ui:VisualElement name="picker-container" class="root-container overlay" style="background-color: rgb(0, 121, 107); justify-content: center; align-items: center; display: none;">
         <ui:VisualElement name="carousel" style="flex-direction: row;">
