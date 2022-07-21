@@ -337,7 +337,7 @@ GameObject:
   - component: {fileID: 390904287}
   - component: {fileID: 390904290}
   m_Layer: 0
-  m_Name: Sphere
+  m_Name: Display Mesh
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -392,7 +392,7 @@ MeshFilter:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 390904285}
-  m_Mesh: {fileID: 10207, guid: 0000000000000000e000000000000000, type: 0}
+  m_Mesh: {fileID: 4300000, guid: b2b28fe5ab4960e41bcac83b6d19c6b4, type: 3}
 --- !u!4 &390904289
 Transform:
   m_ObjectHideFlags: 0
@@ -596,8 +596,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1359720989}
   - component: {fileID: 1359720988}
-  - component: {fileID: 1359720992}
-  - component: {fileID: 1359720993}
+  - component: {fileID: 1359720990}
   m_Layer: 5
   m_Name: PrimaryInterface
   m_TagString: Untagged
@@ -637,7 +636,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1359720992
+--- !u!114 &1359720990
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -646,18 +645,10 @@ MonoBehaviour:
   m_GameObject: {fileID: 1359720987}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 8a410b213209442fb15a69799f0240a5, type: 3}
+  m_Script: {fileID: 11500000, guid: 39e855483f9df02499992648655f6a62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &1359720993
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1359720987}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7a79c4e23d4d4b64bfa5fa9e6671a460, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
+  userInterface: {fileID: 1359720988}
+  carouselCardTemplate: {fileID: 9197481963319205126, guid: fd630a37057fdd84ab35d53f76bed54f,
+    type: 3}
+  displayMesh: {fileID: 390904290}

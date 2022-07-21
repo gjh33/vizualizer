@@ -1,5 +1,7 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using Unity.VisualScripting;
+using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
@@ -13,19 +15,40 @@ public class VisualInterfaceController : UIController
     private const string selectMaterialButtonId = "select-material-button";
     private const string selectTextureButtonId = "select-texture-button";
     
+    public Action<Mesh> OnMeshSelected;
+    public Action<Material> OnMaterialSelected;
+    public Action<Texture2D> OnTextureSelected;
+    
     private VisualTreeAsset carouselCardTemplate;
     private PickerController picker;
 
     private Button selectMeshButton;
     private Button selectMaterialButton;
     private Button selectTextureButton;
-
     
     public VisualInterfaceController(VisualElement rootElement, VisualTreeAsset cardTemplate) : base(rootElement)
     {
         carouselCardTemplate = cardTemplate;
         
         picker = new PickerController(root.Q<VisualElement>(pickerContainerId), carouselCardTemplate);
+        picker.OnMeshSelected += OnPickerMeshSelected;
+        picker.OnMaterialSelected += OnPickerMaterialSelected;
+        picker.OnTextureSelected += OnPickerTextureSelected;
+    }
+
+    private void OnPickerTextureSelected(Texture2D tex)
+    {
+        OnTextureSelected?.Invoke(tex);
+    }
+
+    private void OnPickerMaterialSelected(Material mat)
+    {
+        OnMaterialSelected?.Invoke(mat);
+    }
+
+    private void OnPickerMeshSelected(Mesh mesh)
+    {
+        OnMeshSelected?.Invoke(mesh);
     }
 
     public void Update()

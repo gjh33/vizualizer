@@ -114,18 +114,10 @@ public class CarouselController : UIController
     {
         base.RegisterCallbacks();
         root.RegisterCallback<PointerDownEvent>(OnPointerDown);
-        root.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-        root.RegisterCallback<PointerOutEvent>(OnPointerOut);
-        root.RegisterCallback<PointerUpEvent>(OnPointerUp);
-    }
-
-    private void OnPointerOut(PointerOutEvent evt)
-    {
-        if (dragging)
-        {
-            dragging = false;
-            SnapToNearestIndex();
-        }
+        
+        // Register on root so it always detects drag and up regardless of mouse position
+        root.panel.visualTree.RegisterCallback<PointerUpEvent>(OnPointerUp);
+        root.panel.visualTree.RegisterCallback<PointerMoveEvent>(OnPointerMove);
     }
 
     private void OnPointerUp(PointerUpEvent evt)

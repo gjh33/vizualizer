@@ -5,6 +5,7 @@ using UnityEngine.UIElements;
 public class CarouselCardController : UIController
 {
     private const string carouselTitleId = "carousel-title";
+    private const string carouselCardId = "carousel-card";
     private const float maxPressDuration = 0.15f;
 
     public CarouselItem Item => item;
@@ -12,6 +13,7 @@ public class CarouselCardController : UIController
     public Action<CarouselCardController> Clicked;
     
     private Label carouselTitleLabel;
+    private VisualElement card;
     
     private CarouselItem item;
     private float lastPressTime;
@@ -21,7 +23,7 @@ public class CarouselCardController : UIController
     public void SetItem(CarouselItem item)
     {
         this.item = item;
-        root.style.backgroundImage = item.Graphic;
+        card.style.backgroundImage = item.Graphic;
         carouselTitleLabel.text = item.Title;
     }
 
@@ -29,6 +31,7 @@ public class CarouselCardController : UIController
     {
         base.CollectElements();
         carouselTitleLabel = root.Q<Label>(carouselTitleId);
+        card = root.Q(carouselCardId);
     }
 
     protected override void RegisterCallbacks()
