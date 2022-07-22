@@ -12,9 +12,9 @@ Vizualizer is a 3D mesh visualizer for PC, Mac, Linux, iOS, and Android. It was 
     4. Lighting
     5. Effects
 3. These are your fine tuning controls. These change depending on which primary editing control you currently have selected.
-    - Translation: Choose the plane you wish to translate along
-    - Rotation: Choose the axis around which you wish to rotate
-    - Scale: Choose the axis you wish to scale. U for uniform scaling.
+    - Translation: Choose the plane you wish to translate along. Drag the screen to move the model.
+    - Rotation: Choose the axis around which you wish to rotate. Drag the screen to rotate the model.
+    - Scale: Choose the axis you wish to scale. U for uniform scaling. Drag the screen to scale the model.
     - Lighting: From left to right the sliders represent
         1. Light angle
         2. Light azimuth (orbit around object)
