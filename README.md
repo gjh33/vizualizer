@@ -30,3 +30,8 @@ Vizualizer is a 3D mesh visualizer for PC, Mac, Linux, iOS, and Android. It was 
 
 # Development
 First you must install Unity 2021.3.0 LTS. If building for mobile be sure to include the relevent modules for build support. UI is built using UI Toolkit. The primary entry point is in the VisualizerMain scene. Everything starts and ends with the VisualizerInterface script on PrimaryInterface game object.
+
+# Acknowledgements
+
+[Unity Logo 3D Model - Yanez Designs](https://sketchfab.com/3d-models/unity-logo-a9299dd053cb46a0b2dfcffd378f1088)
+[Dwarven Expedition Pack - Tobyfredson](https://assetstore.unity.com/packages/3d/environments/dungeons/dwarven-expedition-pack-154571)
