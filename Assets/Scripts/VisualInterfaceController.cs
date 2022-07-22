@@ -18,6 +18,7 @@ public class VisualInterfaceController : UIController
     private const string rotateControlId = "rotate-control";
     private const string scaleControlId = "scale-control";
     private const string lightControlId = "light-control";
+    private const string effectControlId = "effect-control";
     private const string translateAxisId = "translate-axis";
     private const string rotationAxisId = "rotation-axis";
     private const string scaleAxisId = "scale-axis";
@@ -30,6 +31,15 @@ public class VisualInterfaceController : UIController
     private const string lightingControlsId = "lighting-controls";
     private const string temperatureSliderId = "temperature-slider";
     private const string angleSliderId = "angle-slider";
+    private const string azimuthSliderId = "azimuth-slider";
+    private const string intensitySliderId = "intensity-slider";
+    private const string effectControlsId = "effect-controls";
+    private const string bloomControlId = "bloom-control";
+    private const string vignetteControlId = "vignette-control";
+    private const string depthOfFieldControlId = "depth-of-field-control";
+    private const string chromaticAberrationControlId = "chromatic-aberration-control";
+    private const string filmGrainControlId = "film-grain-control";
+    private const string paniniProjectionControlId = "panini-projection-control";
 
     private const string controlSelectedClass = "selected";
     
@@ -44,6 +54,15 @@ public class VisualInterfaceController : UIController
 
     public Action<float> OnTemperatureSliderChanged;
     public Action<float> OnAngleSliderChanged;
+    public Action<float> OnAzimuthSliderChanged;
+    public Action<float> OnIntensitySliderChanged;
+    
+    public Action<bool> OnBloomToggled;
+    public Action<bool> OnVignetteToggled;
+    public Action<bool> OnDepthOfFieldToggled;
+    public Action<bool> OnChromaticAberrationToggled;
+    public Action<bool> OnFilmGrainToggled;
+    public Action<bool> OnPaniniProjectionToggled;
 
     private Button selectMeshButton;
     private Button selectMaterialButton;
@@ -52,6 +71,7 @@ public class VisualInterfaceController : UIController
     private Button rotateControl;
     private Button scaleControl;
     private Button lightControl;
+    private Button effectControl;
     private Button translateXZControl;
     private Button translateXYControl;
     private Button rotateXControl;
@@ -61,16 +81,25 @@ public class VisualInterfaceController : UIController
     private Button scaleYControl;
     private Button scaleZControl;
     private Button scaleUniformControl;
+    private Button bloomControl;
+    private Button vignetteControl;
+    private Button depthOfFieldControl;
+    private Button chromaticAberrationControl;
+    private Button filmGrainControl;
+    private Button paniniProjectionControl;
     
     private VisualElement translateAxis;
     private VisualElement rotateAxis;
     private VisualElement scaleAxis;
     private VisualElement lightingControls;
+    private VisualElement effectControls;
     
     private VisualTreeAsset carouselCardTemplate;
     private PickerController picker;
     private VerticalSliderController temperatureSlider;
     private VerticalSliderController angleSlider;
+    private VerticalSliderController azimuthSlider;
+    private VerticalSliderController intensitySlider;
     
     public VisualInterfaceController(VisualElement rootElement, VisualTreeAsset cardTemplate) : base(rootElement)
     {
@@ -86,6 +115,12 @@ public class VisualInterfaceController : UIController
         
         angleSlider = new VerticalSliderController(root.Q<VisualElement>(angleSliderId));
         angleSlider.OnValueChanged += OnAngleSliderValueChanged;
+        
+        azimuthSlider = new VerticalSliderController(root.Q<VisualElement>(azimuthSliderId));
+        azimuthSlider.OnValueChanged += OnAzimuthSliderValueChanged;
+        
+        intensitySlider = new VerticalSliderController(root.Q<VisualElement>(intensitySliderId));
+        intensitySlider.OnValueChanged += OnIntensitySliderValueChanged;
     }
 
     public void Update()
@@ -99,11 +134,13 @@ public class VisualInterfaceController : UIController
         rotateControl.RemoveFromClassList(controlSelectedClass);
         scaleControl.RemoveFromClassList(controlSelectedClass);
         lightControl.RemoveFromClassList(controlSelectedClass);
+        effectControl.RemoveFromClassList(controlSelectedClass);
         OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.Translate);
         scaleAxis.style.display = DisplayStyle.None;
         translateAxis.style.display = DisplayStyle.Flex;
         rotateAxis.style.display = DisplayStyle.None;
         lightingControls.style.display = DisplayStyle.None;
+        effectControls.style.display = DisplayStyle.None;
     }
     
     public void SelectRotateControl()
@@ -112,11 +149,13 @@ public class VisualInterfaceController : UIController
         rotateControl.AddToClassList(controlSelectedClass);
         scaleControl.RemoveFromClassList(controlSelectedClass);
         lightControl.RemoveFromClassList(controlSelectedClass);
+        effectControl.RemoveFromClassList(controlSelectedClass);
         OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.Rotate);
         scaleAxis.style.display = DisplayStyle.None;
         translateAxis.style.display = DisplayStyle.None;
         rotateAxis.style.display = DisplayStyle.Flex;
         lightingControls.style.display = DisplayStyle.None;
+        effectControls.style.display = DisplayStyle.None;
     }
     
     public void SelectScaleControl()
@@ -125,16 +164,19 @@ public class VisualInterfaceController : UIController
         rotateControl.RemoveFromClassList(controlSelectedClass);
         scaleControl.AddToClassList(controlSelectedClass);
         lightControl.RemoveFromClassList(controlSelectedClass);
+        effectControl.RemoveFromClassList(controlSelectedClass);
         OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.Scale);
         scaleAxis.style.display = DisplayStyle.Flex;
         translateAxis.style.display = DisplayStyle.None;
         rotateAxis.style.display = DisplayStyle.None;
         lightingControls.style.display = DisplayStyle.None;
+        effectControls.style.display = DisplayStyle.None;
     }
     
     public void SelectLightControl()
     {
         lightControl.AddToClassList(controlSelectedClass);
+        effectControl.RemoveFromClassList(controlSelectedClass);
         translateControl.RemoveFromClassList(controlSelectedClass);
         rotateControl.RemoveFromClassList(controlSelectedClass);
         scaleControl.RemoveFromClassList(controlSelectedClass);
@@ -143,6 +185,22 @@ public class VisualInterfaceController : UIController
         translateAxis.style.display = DisplayStyle.None;
         rotateAxis.style.display = DisplayStyle.None;
         lightingControls.style.display = DisplayStyle.Flex;
+        effectControls.style.display = DisplayStyle.None;
+    }
+
+    public void SelectEffectControl()
+    {
+        effectControl.AddToClassList(controlSelectedClass);
+        lightControl.RemoveFromClassList(controlSelectedClass);
+        translateControl.RemoveFromClassList(controlSelectedClass);
+        rotateControl.RemoveFromClassList(controlSelectedClass);
+        scaleControl.RemoveFromClassList(controlSelectedClass);
+        OnControlModeChanged?.Invoke(DisplayMesh.ControlMode.None);
+        scaleAxis.style.display = DisplayStyle.None;
+        translateAxis.style.display = DisplayStyle.None;
+        rotateAxis.style.display = DisplayStyle.None;
+        lightingControls.style.display = DisplayStyle.None;
+        effectControls.style.display = DisplayStyle.Flex;
     }
     
     public void SelectTranslateXZControl()
@@ -228,7 +286,53 @@ public class VisualInterfaceController : UIController
     {
         angleSlider.Value = angle;
     }
-
+    
+    public void SetLightIntensity(float intensity)
+    {
+        intensitySlider.Value = intensity;
+    }
+    
+    public void SetLightAzimuth(float azimuth)
+    {
+        azimuthSlider.Value = azimuth;
+    }
+    
+    public void SelectBloomControl()
+    {
+        bloomControl.ToggleInClassList(controlSelectedClass);
+        OnBloomToggled?.Invoke(bloomControl.ClassListContains(controlSelectedClass));
+    }
+    
+    public void SelectVignetteControl()
+    {
+        vignetteControl.ToggleInClassList(controlSelectedClass);
+        OnVignetteToggled?.Invoke(vignetteControl.ClassListContains(controlSelectedClass));
+    }
+    
+    public void SelectDepthOfFieldControl()
+    {
+        depthOfFieldControl.ToggleInClassList(controlSelectedClass);
+        OnDepthOfFieldToggled?.Invoke(depthOfFieldControl.ClassListContains(controlSelectedClass));
+    }
+    
+    public void SelectChromaticAberrationControl()
+    {
+        chromaticAberrationControl.ToggleInClassList(controlSelectedClass);
+        OnChromaticAberrationToggled?.Invoke(chromaticAberrationControl.ClassListContains(controlSelectedClass));
+    }
+    
+    public void SelectFilmGrainControl()
+    {
+        filmGrainControl.ToggleInClassList(controlSelectedClass);
+        OnFilmGrainToggled?.Invoke(filmGrainControl.ClassListContains(controlSelectedClass));
+    }
+    
+    public void SelectPaniniProjectionControl()
+    {
+        paniniProjectionControl.ToggleInClassList(controlSelectedClass);
+        OnPaniniProjectionToggled?.Invoke(paniniProjectionControl.ClassListContains(controlSelectedClass));
+    }
+    
     protected override void CollectElements()
     {
         base.CollectElements();
@@ -240,11 +344,13 @@ public class VisualInterfaceController : UIController
         rotateControl = root.Q<Button>(rotateControlId);
         scaleControl = root.Q<Button>(scaleControlId);
         lightControl = root.Q<Button>(lightControlId);
+        effectControl = root.Q<Button>(effectControlId);
         
         translateAxis = root.Q<VisualElement>(translateAxisId);
         rotateAxis = root.Q<VisualElement>(rotationAxisId);
         scaleAxis = root.Q<VisualElement>(scaleAxisId);
         lightingControls = root.Q<VisualElement>(lightingControlsId);
+        effectControls = root.Q<VisualElement>(effectControlsId);
         
         translateXZControl = translateAxis.Q<Button>(xzControlId);
         translateXYControl = translateAxis.Q<Button>(xyControlId);
@@ -255,6 +361,13 @@ public class VisualInterfaceController : UIController
         scaleYControl = scaleAxis.Q<Button>(yControlId);
         scaleZControl = scaleAxis.Q<Button>(zControlId);
         scaleUniformControl = scaleAxis.Q<Button>(uniformControlId);
+        
+        bloomControl = effectControls.Q<Button>(bloomControlId);
+        vignetteControl = effectControls.Q<Button>(vignetteControlId);
+        depthOfFieldControl = effectControls.Q<Button>(depthOfFieldControlId);
+        chromaticAberrationControl = effectControls.Q<Button>(chromaticAberrationControlId);
+        filmGrainControl = effectControls.Q<Button>(filmGrainControlId);
+        paniniProjectionControl = effectControls.Q<Button>(paniniProjectionControlId);
     }
 
     protected override void RegisterCallbacks()
@@ -268,6 +381,7 @@ public class VisualInterfaceController : UIController
         rotateControl.clickable.clicked += OnRotateControlClicked;
         scaleControl.clickable.clicked += OnScaleControlClicked;
         lightControl.clickable.clicked += OnLightControlClicked;
+        effectControl.clickable.clicked += OnEffectControlClicked;
         
         translateXYControl.clickable.clicked += OnTranslateXYControlClicked;
         translateXZControl.clickable.clicked += OnTranslateXZControlClicked;
@@ -278,8 +392,55 @@ public class VisualInterfaceController : UIController
         scaleYControl.clickable.clicked += OnScaleYControlClicked;
         scaleZControl.clickable.clicked += OnScaleZControlClicked;
         scaleUniformControl.clickable.clicked += OnScaleUniformControlClicked;
+        
+        bloomControl.clickable.clicked += OnBloomControlClicked;
+        vignetteControl.clickable.clicked += OnVignetteControlClicked;
+        depthOfFieldControl.clickable.clicked += OnDepthOfFieldControlClicked;
+        chromaticAberrationControl.clickable.clicked += OnChromaticAberrationControlClicked;
+        filmGrainControl.clickable.clicked += OnFilmGrainControlClicked;
+        paniniProjectionControl.clickable.clicked += OnPaniniProjectionControlClicked;
     }
 
+    private void OnBloomControlClicked()
+    {
+        SelectBloomControl();
+    }
+
+    private void OnVignetteControlClicked()
+    {
+        SelectVignetteControl();
+    }
+
+    private void OnDepthOfFieldControlClicked()
+    {
+        SelectDepthOfFieldControl();
+    }
+
+    private void OnChromaticAberrationControlClicked()
+    {
+        SelectChromaticAberrationControl();
+    }
+
+    private void OnFilmGrainControlClicked()
+    {
+        SelectFilmGrainControl();
+    }
+
+    private void OnPaniniProjectionControlClicked()
+    {
+        SelectPaniniProjectionControl();
+    }
+
+    private void OnAzimuthSliderValueChanged(float value)
+    {
+        OnAzimuthSliderChanged?.Invoke(value);
+    }
+    
+    private void OnIntensitySliderValueChanged(float value)
+    {
+        OnIntensitySliderChanged?.Invoke(value);
+    }
+    
     private void OnAngleSliderValueChanged(float angle)
     {
         OnAngleSliderChanged?.Invoke(angle);
@@ -348,6 +509,11 @@ public class VisualInterfaceController : UIController
     private void OnScaleUniformControlClicked() 
     {
         SelectScaleUniformControl();
+    }
+
+    private void OnEffectControlClicked()
+    {
+        SelectEffectControl();
     }
 
     private void OnLightControlClicked()

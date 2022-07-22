@@ -668,6 +668,7 @@ GameObject:
   m_Component:
   - component: {fileID: 832575519}
   - component: {fileID: 832575518}
+  - component: {fileID: 832575520}
   m_Layer: 0
   m_Name: Global Volume
   m_TagString: Untagged
@@ -707,6 +708,19 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 2
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &832575520
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 832575517}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bdddecf3a7a245a4dacff1b3585c7d06, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  EffectVolume: {fileID: 832575518}
 --- !u!1 &1359720987
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,10 +788,15 @@ MonoBehaviour:
     type: 3}
   DisplayMesh: {fileID: 390904290}
   LightController: {fileID: 410087043}
-  MinLightTemperature: 1500
-  MaxLightTemperature: 20000
+  EffectsController: {fileID: 832575520}
   MinLightAngle: 0
   MaxLightAngle: 180
+  MinLightAzimuth: 0
+  MaxLightAzimuth: 360
+  MinLightIntensity: 0
+  MaxLightIntensity: 3
+  MinLightTemperature: 1500
+  MaxLightTemperature: 20000
 --- !u!1 &1491535318
 GameObject:
   m_ObjectHideFlags: 0

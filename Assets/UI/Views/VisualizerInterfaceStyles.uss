@@ -48,7 +48,7 @@
 .control-button {
     width: 75px;
     height: 75px;
-    margin-bottom: 75px;
+    margin-bottom: 25px;
     background-color: var(--primary-color);
     padding-left: 0;
     padding-right: 0;
@@ -66,6 +66,7 @@
     color: var(--text-icons-color);
     font-size: 50px;
     -unity-font-style: bold;
+    margin-top: 25px;
 }
 
 .control-button.selected {
@@ -104,4 +105,22 @@
 
 #angle-slider #icon {
     background-image: url('project://database/Assets/UI/Icons/icons8-measurement-tool-64.png?fileID=2800000&guid=6d467ce02bbb58948bedebf823bd52c9&type=3#icons8-measurement-tool-64');
+}
+
+#azimuth-slider #icon {
+    background-image: url('project://database/Assets/UI/Icons/icons8-satellite-in-orbit-64.png?fileID=2800000&guid=079bf654b96d6374689c1d9c12b5ed4d&type=3#icons8-satellite-in-orbit-64');
+}
+
+#intensity-slider #icon {
+    background-image: url('project://database/Assets/UI/Icons/icons8-brightness-96.png?fileID=2800000&guid=0b18810dcb41dc341be7cef0432a6787&type=3#icons8-brightness-96');
+}
+
+.control-bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    align-items: center;
+    right: 50px;
+    display: none;
+    justify-content: center;
 }

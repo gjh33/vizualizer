@@ -13,12 +13,19 @@ public class VisualizerInterface : MonoBehaviour
     [SerializeField] private VisualTreeAsset CarouselCardTemplate;
     [SerializeField] private DisplayMesh DisplayMesh;
     [SerializeField] private LightController LightController;
-    
-    [SerializeField] private float MinLightTemperature = 1500f;
-    [SerializeField] private float MaxLightTemperature = 20000f;
+    [SerializeField] private EffectsController EffectsController;
     
     [SerializeField] private float MinLightAngle = 0.0f;
     [SerializeField] private float MaxLightAngle = 180f;
+    
+    [SerializeField] private float MinLightAzimuth = 0.0f;
+    [SerializeField] private float MaxLightAzimuth = 360f;
+    
+    [SerializeField] private float MinLightIntensity = 0.0f;
+    [SerializeField] private float MaxLightIntensity = 3.0f;
+    
+    [SerializeField] private float MinLightTemperature = 1500f;
+    [SerializeField] private float MaxLightTemperature = 20000f;
 
     private VisualInterfaceController rootController;
 
@@ -57,6 +64,14 @@ public class VisualizerInterface : MonoBehaviour
         rootController.OnScaleAxisChanged += OnScaleAxisChanged;
         rootController.OnTemperatureSliderChanged += OnTemperatureSliderChanged;
         rootController.OnAngleSliderChanged += OnLightAngleSliderChanged;
+        rootController.OnAzimuthSliderChanged += OnLightAzimuthSliderChanged;
+        rootController.OnIntensitySliderChanged += OnLightIntensitySliderChanged;
+        rootController.OnBloomToggled += OnBloomToggled;
+        rootController.OnVignetteToggled += OnVignetteToggled;
+        rootController.OnDepthOfFieldToggled += OnDepthOfFieldToggled;
+        rootController.OnChromaticAberrationToggled += OnChromaticAberrationToggled;
+        rootController.OnFilmGrainToggled += OnFilmGrainToggled;
+        rootController.OnPaniniProjectionToggled += OnPaniniProjectionToggled;
     }
 
     private void InitDefaults()
@@ -117,6 +132,40 @@ public class VisualizerInterface : MonoBehaviour
         rootController.SetLightAngle(anglePercent);
         float temperaturePercent = (LightController.Temperature - MinLightTemperature) / (MaxLightTemperature - MinLightTemperature);
         rootController.SetLightTemperature(temperaturePercent);
+        float intensityPercent = (LightController.Intensity - MinLightIntensity) / (MaxLightIntensity - MinLightIntensity);
+        rootController.SetLightIntensity(intensityPercent);
+        float azimuthPercent = (LightController.Azimuth - MinLightAzimuth) / (MaxLightAzimuth - MinLightAzimuth);
+        rootController.SetLightAzimuth(azimuthPercent);
+    }
+
+    private void OnPaniniProjectionToggled(bool on)
+    {
+        EffectsController.SetPaniniProjection(on);
+    }
+
+    private void OnFilmGrainToggled(bool on)
+    {
+        EffectsController.SetFilmGrain(on);
+    }
+
+    private void OnChromaticAberrationToggled(bool on)
+    {
+        EffectsController.SetChromaticAberration(on);
+    }
+
+    private void OnDepthOfFieldToggled(bool on)
+    {
+        EffectsController.SetDepthOfField(on);
+    }
+
+    private void OnVignetteToggled(bool on)
+    {
+        EffectsController.SetVignette(on);
+    }
+
+    private void OnBloomToggled(bool on)
+    {
+        EffectsController.SetBloom(on);
     }
 
     private void OnLightAngleSliderChanged(float a)
@@ -129,6 +178,18 @@ public class VisualizerInterface : MonoBehaviour
     {
         float temp = Mathf.Lerp(MinLightTemperature, MaxLightTemperature, t);
         LightController.Temperature = temp;
+    }
+
+    private void OnLightIntensitySliderChanged(float i)
+    {
+        float intensity = Mathf.Lerp(MinLightIntensity, MaxLightIntensity, i);
+        LightController.Intensity = intensity;
+    }
+
+    private void OnLightAzimuthSliderChanged(float a)
+    {
+        float azimuth = Mathf.Lerp(MinLightAzimuth, MaxLightAzimuth, a);
+        LightController.Azimuth = azimuth;
     }
 
     private void OnScaleAxisChanged(DisplayMesh.ScaleAxis axis)
