@@ -4,8 +4,8 @@ using UnityEngine.UIElements;
 
 public class VerticalSliderController : UIController
 {
-    private const string slideContainerId = "slide-container";
-    private const string knobId = "knob";
+    private const string SlideContainerId = "slide-container";
+    private const string KnobId = "knob";
     
     public Action<float> OnValueChanged;
     
@@ -22,8 +22,8 @@ public class VerticalSliderController : UIController
     protected override void CollectElements()
     {
         base.CollectElements();
-        slideContainer = root.Q(slideContainerId);
-        knob = root.Q(knobId);
+        slideContainer = root.Q(SlideContainerId);
+        knob = root.Q(KnobId);
     }
 
     protected override void RegisterCallbacks()
@@ -64,7 +64,6 @@ public class VerticalSliderController : UIController
 
     private void OnKnobPointerMove(PointerMoveEvent evt)
     {
-        Debug.Log("Move");
         if (dragging)
         {
             OnDragMove(evt.deltaPosition);
@@ -73,7 +72,6 @@ public class VerticalSliderController : UIController
 
     private void OnKnobPointerCaptureOut(PointerCaptureOutEvent evt)
     {
-        Debug.Log("Capture out");
         if (dragging) 
         {
             EndDrag();
@@ -82,14 +80,12 @@ public class VerticalSliderController : UIController
 
     private void BeginDrag()
     {
-        Debug.Log("Begin drag");
         dragging = true;
         knob.CapturePointer(0);
     }
     
     private void EndDrag()
     {
-        Debug.Log("End drag");
         dragging = false;
         knob.ReleasePointer(0);
     }

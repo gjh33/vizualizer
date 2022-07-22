@@ -4,10 +4,10 @@ using UnityEngine.UIElements;
 
 public class CarouselCardController : UIController
 {
-    private const string carouselTitleId = "carousel-title";
-    private const string carouselCardId = "carousel-card";
-    private const float maxPressDuration = 0.15f;
-    private const float pressCancelDistance = 10f;
+    private const string CarouselTitleId = "carousel-title";
+    private const string CarouselCardId = "carousel-card";
+    private const float MAXPressDuration = 0.15f;
+    private const float PressCancelDistance = 10f;
 
     public CarouselItem Item => item;
     
@@ -32,8 +32,8 @@ public class CarouselCardController : UIController
     protected override void CollectElements()
     {
         base.CollectElements();
-        carouselTitleLabel = root.Q<Label>(carouselTitleId);
-        card = root.Q(carouselCardId);
+        carouselTitleLabel = root.Q<Label>(CarouselTitleId);
+        card = root.Q(CarouselCardId);
     }
 
     protected override void RegisterCallbacks()
@@ -46,7 +46,7 @@ public class CarouselCardController : UIController
 
     private void OnPointerMove(PointerMoveEvent evt)
     {
-        if (Vector2.Distance(evt.position, lastPressPosition) > pressCancelDistance)
+        if (Vector2.Distance(evt.position, lastPressPosition) > PressCancelDistance)
         {
             lastPressTime = -1;
         }
@@ -54,7 +54,7 @@ public class CarouselCardController : UIController
 
     private void OnPointerUp(PointerUpEvent evt)
     {
-        if (Time.time - lastPressTime < maxPressDuration)
+        if (Time.time - lastPressTime < MAXPressDuration)
         {
             Clicked?.Invoke(this);
         }

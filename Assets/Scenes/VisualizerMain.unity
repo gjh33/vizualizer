@@ -657,7 +657,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   Light: {fileID: 410087040}
-  Target: {fileID: 390904290}
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0

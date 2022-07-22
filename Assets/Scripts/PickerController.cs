@@ -12,15 +12,14 @@ public class PickerController : UIController
     private const string MaterialResourcePath = "Materials";
     private const string TextureResourcePath = "Textures";
     private const string IconRootPath = "Preview Images";
-    private const string carouselId = "carousel";
-    private const string closeButtonId = "close-button";
-    private const string titleLabelId = "title-label";
+    private const string CarouselId = "carousel";
+    private const string CloseButtonId = "close-button";
+    private const string TitleLabelId = "title-label";
     
     public Action<Mesh> OnMeshSelected;
     public Action<Material> OnMaterialSelected;
     public Action<Texture2D> OnTextureSelected;
     
-    private VisualTreeAsset carouselCardTemplate;
     private CarouselController carousel;
 
     private Label titleLabel;
@@ -28,9 +27,7 @@ public class PickerController : UIController
 
     public PickerController(VisualElement rootElement, VisualTreeAsset cardTemplate) : base(rootElement)
     {
-        carouselCardTemplate = cardTemplate;
-        
-        carousel = new CarouselController(root.Q<VisualElement>(carouselId), carouselCardTemplate);
+        carousel = new CarouselController(root.Q<VisualElement>(CarouselId), cardTemplate);
         carousel.ItemSelected += OnItemSelected;
     }
 
@@ -64,8 +61,8 @@ public class PickerController : UIController
     {
         base.CollectElements();
         
-        titleLabel = root.Q<Label>(titleLabelId);
-        closeButton = root.Q<Button>(closeButtonId);
+        titleLabel = root.Q<Label>(TitleLabelId);
+        closeButton = root.Q<Button>(CloseButtonId);
     }
 
     protected override void RegisterCallbacks()

@@ -9,7 +9,7 @@ public class CarouselController : UIController
 {
     private const float CarouselSpeed = 0.1f;
     
-    private VisualTreeAsset carouselCardTemplate;
+    private readonly VisualTreeAsset carouselCardTemplate;
 
     public Action<CarouselItem> ItemSelected;
     

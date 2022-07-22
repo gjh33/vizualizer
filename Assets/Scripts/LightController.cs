@@ -6,7 +6,6 @@ using UnityEngine;
 public class LightController : MonoBehaviour
 {
     [SerializeField] private Light Light;
-    [SerializeField] private DisplayMesh Target;
     
     public float Temperature { get => Light.colorTemperature; set => SetTemperature(value); }
     public float Intensity { get => Light.intensity; set => SetIntensity(value); }
