@@ -41,9 +41,9 @@ public class VerticalSliderController : UIController
         base.RegisterCallbacks();
         knob.RegisterCallback<PointerDownEvent>(OnKnobPointerDown);
         
-        // NOTE: While we do capture the pointer, the functionality is broken
+        // NOTE: The capture functionality is broken
         // on touch devices. The events will not fire if the cursor is not over
-        // the knob.
+        // the knob. So instead we use this approach of registering to the panel
         knob.panel.visualTree.RegisterCallback<PointerUpEvent>(OnKnobPointerUp);
         knob.panel.visualTree.RegisterCallback<PointerMoveEvent>(OnKnobPointerMove);
         knob.RegisterCallback<PointerCaptureOutEvent>(OnKnobPointerCaptureOut);
@@ -91,13 +91,11 @@ public class VerticalSliderController : UIController
     private void BeginDrag()
     {
         dragging = true;
-        knob.CapturePointer(0);
     }
     
     private void EndDrag()
     {
         dragging = false;
-        knob.ReleasePointer(0);
     }
     
     private void OnDragMove(Vector2 delta)
