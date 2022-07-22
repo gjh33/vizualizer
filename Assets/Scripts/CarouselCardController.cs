@@ -2,6 +2,9 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Controller for a carousel card displaying a CarouselItem
+/// </summary>
 public class CarouselCardController : UIController
 {
     private const string CarouselTitleId = "carousel-title";
@@ -9,8 +12,14 @@ public class CarouselCardController : UIController
     private const float MAXPressDuration = 0.15f;
     private const float PressCancelDistance = 10f;
 
+    /// <summary>
+    /// The item currently displayed by the card
+    /// </summary>
     public CarouselItem Item => item;
     
+    /// <summary>
+    /// Fired when the user clicks on the card. Passes itself as an argument for easy callback re-use
+    /// </summary>
     public Action<CarouselCardController> Clicked;
     
     private Label carouselTitleLabel;
@@ -22,6 +31,10 @@ public class CarouselCardController : UIController
     
     public CarouselCardController(VisualElement rootElement) : base(rootElement) {}
 
+    /// <summary>
+    /// Set the item to be displayed by the card
+    /// </summary>
+    /// <param name="item">CarouselItem to be displayed</param>
     public void SetItem(CarouselItem item)
     {
         this.item = item;

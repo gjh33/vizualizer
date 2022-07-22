@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Controller for the picker UI that allows the user to choose between various assets
+/// </summary>
 public class PickerController : UIController
 {
     private const string PickMeshTitle = "Select Mesh";
@@ -16,8 +19,17 @@ public class PickerController : UIController
     private const string CloseButtonId = "close-button";
     private const string TitleLabelId = "title-label";
     
+    /// <summary>
+    /// Fired when the user selects a mesh asset
+    /// </summary>
     public Action<Mesh> OnMeshSelected;
+    /// <summary>
+    /// Fired when the user selects a material asset
+    /// </summary>
     public Action<Material> OnMaterialSelected;
+    /// <summary>
+    /// Fired when the user selects a texture asset
+    /// </summary>
     public Action<Texture2D> OnTextureSelected;
     
     private CarouselController carousel;
@@ -36,6 +48,9 @@ public class PickerController : UIController
         carousel.Update();
     }
 
+    /// <summary>
+    /// Open the picker UI and display a list of meshes
+    /// </summary>
     public void PickMesh()
     {
         titleLabel.text = PickMeshTitle;
@@ -43,6 +58,9 @@ public class PickerController : UIController
         Show();
     }
     
+    /// <summary>
+    /// Open the picker UI and display a list of materials
+    /// </summary>
     public void PickMaterial()
     {
         titleLabel.text = PickMaterialTitle;
@@ -50,6 +68,9 @@ public class PickerController : UIController
         Show();
     }
     
+    /// <summary>
+    /// Open the picker UI and display a list of textures
+    /// </summary>
     public void PickTexture()
     {
         titleLabel.text = PickTextureTitle;
@@ -103,6 +124,8 @@ public class PickerController : UIController
         Hide();
     }
 
+    // Loads assets into CarouselItem objects. Right now graphics are done by convention not configuration
+    // In the future this should be configurable to allow user uploaded content
     private IEnumerable<CarouselItem> EnumerateItems<T>(string resourcePath)
         where T : UnityEngine.Object
     {

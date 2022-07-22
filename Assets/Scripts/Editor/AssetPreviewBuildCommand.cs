@@ -5,6 +5,9 @@ using UnityEditor;
 using UnityEditor.VersionControl;
 using UnityEngine;
 
+/// <summary>
+/// Editor tool to build preview textures for use at runtime by the picker controller
+/// </summary>
 public class AssetPreviewBuildCommand
 {
     private const string RootPath = "Assets/Resources";
@@ -33,7 +36,8 @@ public class AssetPreviewBuildCommand
             if (asset == null) continue;
             
             // Busy loop to avoid null
-            // Pretty sure I'm abusing this API
+            // Pretty sure I'm abusing this API but this is an editor tool being used only by me
+            // So i'm sure we'll survive ;)
             AssetPreview.GetAssetPreview(asset);
             while (AssetPreview.IsLoadingAssetPreview(asset.GetInstanceID())) {}
             

@@ -2,16 +2,26 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Controller for vertical slider UI
+/// </summary>
 public class VerticalSliderController : UIController
 {
     private const string SlideContainerId = "slide-container";
     private const string KnobId = "knob";
     
+    /// <summary>
+    /// Fired when the value of the slider changes
+    /// </summary>
     public Action<float> OnValueChanged;
     
+    /// <summary>
+    /// The value of the slider between 0 and 1
+    /// </summary>
     public float Value { get => currentValue; set => SetValue(value); }
 
     private VisualElement slideContainer;
+    // what did you call me?
     private VisualElement knob;
 
     private float currentValue;

@@ -5,17 +5,22 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.UIElements;
 
+/// <summary>
+/// Controller for the carousel UI to select an item from a list
+/// </summary>
 public class CarouselController : UIController
 {
     private const float CarouselSpeed = 0.1f;
     
     private readonly VisualTreeAsset carouselCardTemplate;
 
+    /// <summary>
+    /// Fired when the user has selected a carousel item
+    /// </summary>
     public Action<CarouselItem> ItemSelected;
     
     private Label titleLabel;
     
-    private int currentIndex = -1;
     private float targetOffset = 0;
     private float currentVelocity = 0;
     private List<CarouselCardController> cards = new List<CarouselCardController>();
@@ -36,6 +41,10 @@ public class CarouselController : UIController
         }
     }
 
+    /// <summary>
+    /// Set the carousel items to be displayed
+    /// </summary>
+    /// <param name="items">list of carousel items to display</param>
     public void SetItems(IEnumerable<CarouselItem> items)
     {
         root.Clear();
@@ -52,6 +61,7 @@ public class CarouselController : UIController
         }
 
         // Have to delay our index init until styles have been resolved
+        // and the cards have been rendered
         root.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
     }
 
@@ -71,7 +81,6 @@ public class CarouselController : UIController
 
     private void SetIndex(int index)
     {
-        currentIndex = index;
         targetOffset = GetXOffsetForIndex(index);
     }
 
@@ -120,14 +129,6 @@ public class CarouselController : UIController
         // So instead we register to the panel root which is screen wide
         root.panel.visualTree.RegisterCallback<PointerUpEvent>(OnPointerUp);
         root.panel.visualTree.RegisterCallback<PointerMoveEvent>(OnPointerMove);
-    }
-
-    private void OnPointerCaptureOut(PointerCaptureOutEvent evt)
-    {
-        if (dragging)
-        {
-            EndDrag();
-        }
     }
 
     private void OnPointerUp(PointerUpEvent evt)

@@ -1,5 +1,8 @@
 ﻿using UnityEngine.UIElements;
 
+/// <summary>
+/// Base class for UIControllers for runtime UI
+/// </summary>
 public class UIController
 {
     protected VisualElement root;

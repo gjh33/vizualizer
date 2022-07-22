@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.EventSystems;
 
 /// <summary>
-/// Displays a mesh with a material and texture.
+/// Controls mesh properties with user input and API.
 /// </summary>
 public class DisplayMesh : MonoBehaviour
 {
@@ -14,17 +14,40 @@ public class DisplayMesh : MonoBehaviour
     public enum RotationAxis { X, Y, Z };
     public enum ScaleAxis { X, Y, Z, Uniform };
     
+    [Tooltip("The mesh filter used to set the displayed mesh")]
     [SerializeField] private MeshFilter Filter;
+    [Tooltip("The mesh renderer used to set the displayed material")]
     [SerializeField] private MeshRenderer Renderer;
+    [Tooltip("The factor by which user input is scaled to world units when translating")]
     [SerializeField] private float TranslationSensitivity = 0.01f;
+    [Tooltip("The factor by which user input is scaled to degrees when rotating")]
     [SerializeField] private float RotationSensitivity = 0.5f;
+    [Tooltip("The factor by which user input is scaled a multiplier when scaling")]
     [SerializeField] private float ScaleSensitivity = 0.01f;
 
+    /// <summary>
+    /// Determines how the mesh is manipulated by user input
+    /// </summary>
     public ControlMode CurrentControlMode = ControlMode.Translate;
-    public TranslationAxis CurrentTranslationAxis = TranslationAxis.XZ;
+    
+    /// <summary>
+    /// When in translation mode, determines the plane along which the mesh is translated
+    /// </summary>
+    public TranslationAxis CurrentTranslationPlane = TranslationAxis.XZ;
+    
+    /// <summary>
+    /// When in rotation mode, determines the axis around which the mesh is rotated
+    /// </summary>
     public RotationAxis CurrentRotationAxis = RotationAxis.Y;
+    
+    /// <summary>
+    /// When in scale mode, determines the axis the mesh is scaled along
+    /// </summary>
     public ScaleAxis CurrentScaleAxis = ScaleAxis.Uniform;
 
+    /// <summary>
+    /// Determines whether or not user input is received to control the mesh
+    /// </summary>
     public bool ControlsEnabled = true;
     
     private VisualizerControls input;
@@ -94,7 +117,7 @@ public class DisplayMesh : MonoBehaviour
             if (CurrentControlMode == ControlMode.Translate)
             {
                 delta *= TranslationSensitivity;
-                if (CurrentTranslationAxis == TranslationAxis.XZ)
+                if (CurrentTranslationPlane == TranslationAxis.XZ)
                 {
                     transform.Translate(new Vector3(delta.x, 0, delta.y), Space.World);
                 }

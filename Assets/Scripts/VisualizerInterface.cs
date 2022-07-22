@@ -9,22 +9,35 @@ using UnityEngine.UIElements;
 /// </summary>
 public class VisualizerInterface : MonoBehaviour
 {
+    [Tooltip("The UI Document containing the user interface.")]
     [SerializeField] private UIDocument UserInterface;
+    [Tooltip("The template for carousel cards in the picker.")]
     [SerializeField] private VisualTreeAsset CarouselCardTemplate;
+    [Tooltip("The display mesh being controlled by the interface")]
     [SerializeField] private DisplayMesh DisplayMesh;
+    [Tooltip("The light controller being controlled by the interface")]
     [SerializeField] private LightController LightController;
+    [Tooltip("The effects controller being controlled by the interface")]
     [SerializeField] private EffectsController EffectsController;
     
+    [Tooltip("The min light angle for the slider control")]
     [SerializeField] private float MinLightAngle = 0.0f;
+    [Tooltip("The max light angle for the slider control")]
     [SerializeField] private float MaxLightAngle = 180f;
     
+    [Tooltip("The min light azimuth for the slider control")]
     [SerializeField] private float MinLightAzimuth = 0.0f;
+    [Tooltip("The max light azimuth for the slider control")]
     [SerializeField] private float MaxLightAzimuth = 360f;
     
+    [Tooltip("The min light intensity for the slider control")]
     [SerializeField] private float MinLightIntensity = 0.0f;
+    [Tooltip("The max light intensity for the slider control")]
     [SerializeField] private float MaxLightIntensity = 3.0f;
     
+    [Tooltip("The min light temperature for the slider control")]
     [SerializeField] private float MinLightTemperature = 1500f;
+    [Tooltip("The max light temperature for the slider control")]
     [SerializeField] private float MaxLightTemperature = 20000f;
 
     private VisualInterfaceController rootController;
@@ -58,14 +71,14 @@ public class VisualizerInterface : MonoBehaviour
         rootController.OnMeshSelected += OnMeshSelected;
         rootController.OnMaterialSelected += OnMaterialSelected;
         rootController.OnTextureSelected += OnTextureSelected;
-        rootController.OnControlModeChanged += OnControlModeChanged;
-        rootController.OnTranslationAxisChanged += OnTranslationAxisChanged;
-        rootController.OnRotationAxisChanged += OnRotationAxisChanged;
-        rootController.OnScaleAxisChanged += OnScaleAxisChanged;
-        rootController.OnTemperatureSliderChanged += OnTemperatureSliderChanged;
-        rootController.OnAngleSliderChanged += OnLightAngleSliderChanged;
-        rootController.OnAzimuthSliderChanged += OnLightAzimuthSliderChanged;
-        rootController.OnIntensitySliderChanged += OnLightIntensitySliderChanged;
+        rootController.OnMeshControlModeChanged += OnControlModeChanged;
+        rootController.OnMeshTranslationPlaneChanged += OnTranslationPlaneChanged;
+        rootController.OnMeshRotationAxisChanged += OnRotationAxisChanged;
+        rootController.OnMeshScaleAxisChanged += OnScaleAxisChanged;
+        rootController.OnLightTemperatureSliderChanged += OnTemperatureSliderChanged;
+        rootController.OnLightAngleSliderChanged += OnLightAngleSliderChanged;
+        rootController.OnLightAzimuthSliderChanged += OnLightAzimuthSliderChanged;
+        rootController.OnLightIntensitySliderChanged += OnLightIntensitySliderChanged;
         rootController.OnBloomToggled += OnBloomToggled;
         rootController.OnVignetteToggled += OnVignetteToggled;
         rootController.OnDepthOfFieldToggled += OnDepthOfFieldToggled;
@@ -74,6 +87,7 @@ public class VisualizerInterface : MonoBehaviour
         rootController.OnPaniniProjectionToggled += OnPaniniProjectionToggled;
     }
 
+    // Scans the current state of the scene and sets up the UI to match accordingly
     private void InitDefaults()
     {
         switch (DisplayMesh.CurrentControlMode)
@@ -89,7 +103,7 @@ public class VisualizerInterface : MonoBehaviour
                 break;
         }
 
-        switch (DisplayMesh.CurrentTranslationAxis)
+        switch (DisplayMesh.CurrentTranslationPlane)
         {
             case DisplayMesh.TranslationAxis.XZ:
                 rootController.SelectTranslateXZControl();
@@ -136,36 +150,61 @@ public class VisualizerInterface : MonoBehaviour
         rootController.SetLightIntensity(intensityPercent);
         float azimuthPercent = (LightController.Azimuth - MinLightAzimuth) / (MaxLightAzimuth - MinLightAzimuth);
         rootController.SetLightAzimuth(azimuthPercent);
+        
+        if (EffectsController.Bloom)
+        {
+            rootController.SelectBloomControl();
+        }
+        if (EffectsController.Vignette)
+        {
+            rootController.SelectVignetteControl();
+        }
+        if (EffectsController.DepthOfField)
+        {
+            rootController.SelectDepthOfFieldControl();
+        }
+        if (EffectsController.ChromaticAberration)
+        {
+            rootController.SelectChromaticAberrationControl();
+        }
+        if (EffectsController.FilmGrain)
+        {
+            rootController.SelectFilmGrainControl();
+        }
+        if (EffectsController.PaniniProjection)
+        {
+            rootController.SelectPaniniProjectionControl();
+        }
     }
 
     private void OnPaniniProjectionToggled(bool on)
     {
-        EffectsController.SetPaniniProjection(on);
+        EffectsController.PaniniProjection = on;
     }
 
     private void OnFilmGrainToggled(bool on)
     {
-        EffectsController.SetFilmGrain(on);
+        EffectsController.FilmGrain = on;
     }
 
     private void OnChromaticAberrationToggled(bool on)
     {
-        EffectsController.SetChromaticAberration(on);
+        EffectsController.ChromaticAberration = on;
     }
 
     private void OnDepthOfFieldToggled(bool on)
     {
-        EffectsController.SetDepthOfField(on);
+        EffectsController.DepthOfField = on;
     }
 
     private void OnVignetteToggled(bool on)
     {
-        EffectsController.SetVignette(on);
+        EffectsController.Vignette = on;
     }
 
     private void OnBloomToggled(bool on)
     {
-        EffectsController.SetBloom(on);
+        EffectsController.Bloom = on;
     }
 
     private void OnLightAngleSliderChanged(float a)
@@ -202,9 +241,9 @@ public class VisualizerInterface : MonoBehaviour
         DisplayMesh.CurrentRotationAxis = axis;
     }
 
-    private void OnTranslationAxisChanged(DisplayMesh.TranslationAxis axis)
+    private void OnTranslationPlaneChanged(DisplayMesh.TranslationAxis plane)
     {
-        DisplayMesh.CurrentTranslationAxis = axis;
+        DisplayMesh.CurrentTranslationPlane = plane;
     }
 
     private void OnControlModeChanged(DisplayMesh.ControlMode mode)
