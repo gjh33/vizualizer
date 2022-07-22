@@ -71,7 +71,9 @@ public class DisplayMesh : MonoBehaviour
     /// <param name="material">The material to apply</param>
     public void SetMaterial(Material material)
     {
+        Texture2D currentTexture = Renderer.material.mainTexture as Texture2D;
         Renderer.material = material;
+        Renderer.material.mainTexture = currentTexture;
     }
     
     /// <summary>
