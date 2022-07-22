@@ -7,6 +7,7 @@ public class CarouselCardController : UIController
     private const string carouselTitleId = "carousel-title";
     private const string carouselCardId = "carousel-card";
     private const float maxPressDuration = 0.15f;
+    private const float pressCancelDistance = 10f;
 
     public CarouselItem Item => item;
     
@@ -17,6 +18,7 @@ public class CarouselCardController : UIController
     
     private CarouselItem item;
     private float lastPressTime;
+    private Vector2 lastPressPosition;
     
     public CarouselCardController(VisualElement rootElement) : base(rootElement) {}
 
@@ -44,7 +46,10 @@ public class CarouselCardController : UIController
 
     private void OnPointerMove(PointerMoveEvent evt)
     {
-        lastPressTime = -1;
+        if (Vector2.Distance(evt.position, lastPressPosition) > pressCancelDistance)
+        {
+            lastPressTime = -1;
+        }
     }
 
     private void OnPointerUp(PointerUpEvent evt)
@@ -58,5 +63,6 @@ public class CarouselCardController : UIController
     private void OnPointerDown(PointerDownEvent evt)
     {
         lastPressTime = Time.time;
+        lastPressPosition = evt.position;
     }
 }
