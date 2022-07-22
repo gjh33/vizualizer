@@ -36,8 +36,8 @@
             <ui:Instance template="vertical-slider" name="intensity-slider" picking-mode="Ignore" style="height: 100%;" />
             <ui:Instance template="vertical-slider" name="temperature-slider" picking-mode="Ignore" style="height: 100%;" />
         </ui:VisualElement>
-        <ui:VisualElement name="effect-controls" picking-mode="Ignore" class="control-bar" style="display: none;">
-            <ui:Button display-tooltip-when-elided="true" name="bloom-control" text="B" class="control-button selected" />
+        <ui:VisualElement name="effect-controls" picking-mode="Ignore" class="control-bar">
+            <ui:Button display-tooltip-when-elided="true" name="bloom-control" text="B" class="control-button" />
             <ui:Button display-tooltip-when-elided="true" name="vignette-control" text="V" class="control-button" />
             <ui:Button display-tooltip-when-elided="true" name="depth-of-field-control" text="D" class="control-button" />
             <ui:Button display-tooltip-when-elided="true" name="chromatic-aberration-control" text="C" class="control-button" />
