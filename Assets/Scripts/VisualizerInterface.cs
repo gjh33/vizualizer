@@ -9,9 +9,10 @@ using UnityEngine.UIElements;
 /// </summary>
 public class VisualizerInterface : MonoBehaviour
 {
-    [SerializeField] private UIDocument userInterface;
-    [SerializeField] private VisualTreeAsset carouselCardTemplate;
-    [SerializeField] private DisplayMesh displayMesh;
+    [SerializeField] private UIDocument UserInterface;
+    [SerializeField] private VisualTreeAsset CarouselCardTemplate;
+    [SerializeField] private DisplayMesh DisplayMesh;
+    [SerializeField] private LightController LightController;
     
     [SerializeField] private float MinLightTemperature = 1500f;
     [SerializeField] private float MaxLightTemperature = 20000f;
@@ -23,7 +24,14 @@ public class VisualizerInterface : MonoBehaviour
 
     private void OnEnable()
     {
-        rootController = new VisualInterfaceController(userInterface.rootVisualElement, carouselCardTemplate);
+        rootController = new VisualInterfaceController(UserInterface.rootVisualElement, CarouselCardTemplate);
+        
+        // Delay until geometry is updated
+        UserInterface.rootVisualElement.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);
+    }
+
+    private void OnGeometryChanged(GeometryChangedEvent evt)
+    {
         InitDefaults();
         RegisterCallbacks();
     }
@@ -35,7 +43,7 @@ public class VisualizerInterface : MonoBehaviour
 
     private void Reset()
     {
-        userInterface = GetComponent<UIDocument>();
+        UserInterface = GetComponent<UIDocument>();
     }
 
     private void RegisterCallbacks()
@@ -47,23 +55,13 @@ public class VisualizerInterface : MonoBehaviour
         rootController.OnTranslationAxisChanged += OnTranslationAxisChanged;
         rootController.OnRotationAxisChanged += OnRotationAxisChanged;
         rootController.OnScaleAxisChanged += OnScaleAxisChanged;
-        userInterface.rootVisualElement.RegisterCallback<PointerOverEvent>(OnPointerOver);
-        userInterface.rootVisualElement.RegisterCallback<PointerOutEvent>(OnPointerOut);
-    }
-
-    private void OnPointerOver(PointerOverEvent evt)
-    {
-        displayMesh.ControlsEnabled = false;
-    }
-
-    private void OnPointerOut(PointerOutEvent evt)
-    {
-        displayMesh.ControlsEnabled = true;
+        rootController.OnTemperatureSliderChanged += OnTemperatureSliderChanged;
+        rootController.OnAngleSliderChanged += OnLightAngleSliderChanged;
     }
 
     private void InitDefaults()
     {
-        switch (displayMesh.CurrentControlMode)
+        switch (DisplayMesh.CurrentControlMode)
         {
             case DisplayMesh.ControlMode.Translate:
                 rootController.SelectTranslateControl();
@@ -76,7 +74,7 @@ public class VisualizerInterface : MonoBehaviour
                 break;
         }
 
-        switch (displayMesh.CurrentTranslationAxis)
+        switch (DisplayMesh.CurrentTranslationAxis)
         {
             case DisplayMesh.TranslationAxis.XZ:
                 rootController.SelectTranslateXZControl();
@@ -86,7 +84,7 @@ public class VisualizerInterface : MonoBehaviour
                 break;
         }
         
-        switch (displayMesh.CurrentRotationAxis)
+        switch (DisplayMesh.CurrentRotationAxis)
         {
             case DisplayMesh.RotationAxis.X:
                 rootController.SelectRotateXControl();
@@ -99,7 +97,7 @@ public class VisualizerInterface : MonoBehaviour
                 break;
         }
         
-        switch (displayMesh.CurrentScaleAxis)
+        switch (DisplayMesh.CurrentScaleAxis)
         {
             case DisplayMesh.ScaleAxis.X:
                 rootController.SelectScaleXControl();
@@ -114,40 +112,57 @@ public class VisualizerInterface : MonoBehaviour
                 rootController.SelectScaleUniformControl();
                 break;
         }
+        
+        float anglePercent = (LightController.Angle - MinLightAngle) / (MaxLightAngle - MinLightAngle);
+        rootController.SetLightAngle(anglePercent);
+        float temperaturePercent = (LightController.Temperature - MinLightTemperature) / (MaxLightTemperature - MinLightTemperature);
+        rootController.SetLightTemperature(temperaturePercent);
+    }
+
+    private void OnLightAngleSliderChanged(float a)
+    {
+        float angle = Mathf.Lerp(MinLightAngle, MaxLightAngle, a);
+        LightController.Angle = angle;
+    }
+
+    private void OnTemperatureSliderChanged(float t)
+    {
+        float temp = Mathf.Lerp(MinLightTemperature, MaxLightTemperature, t);
+        LightController.Temperature = temp;
     }
 
     private void OnScaleAxisChanged(DisplayMesh.ScaleAxis axis)
     {
-        displayMesh.CurrentScaleAxis = axis;
+        DisplayMesh.CurrentScaleAxis = axis;
     }
 
     private void OnRotationAxisChanged(DisplayMesh.RotationAxis axis)
     {
-        displayMesh.CurrentRotationAxis = axis;
+        DisplayMesh.CurrentRotationAxis = axis;
     }
 
     private void OnTranslationAxisChanged(DisplayMesh.TranslationAxis axis)
     {
-        displayMesh.CurrentTranslationAxis = axis;
+        DisplayMesh.CurrentTranslationAxis = axis;
     }
 
     private void OnControlModeChanged(DisplayMesh.ControlMode mode)
     {
-        displayMesh.CurrentControlMode = mode;
+        DisplayMesh.CurrentControlMode = mode;
     }
 
     private void OnTextureSelected(Texture2D tex)
     {
-        displayMesh.SetTexture(tex);
+        DisplayMesh.SetTexture(tex);
     }
 
     private void OnMaterialSelected(Material mat)
     {
-        displayMesh.SetMaterial(mat);
+        DisplayMesh.SetMaterial(mat);
     }
 
     private void OnMeshSelected(Mesh mesh)
     {
-        displayMesh.SetMesh(mesh);
+        DisplayMesh.SetMesh(mesh);
     }
 }

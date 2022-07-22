@@ -33,6 +33,13 @@ public class VerticalSliderController : UIController
         knob.RegisterCallback<PointerUpEvent>(OnKnobPointerUp);
         knob.RegisterCallback<PointerMoveEvent>(OnKnobPointerMove);
         knob.RegisterCallback<PointerCaptureOutEvent>(OnKnobPointerCaptureOut);
+        slideContainer.RegisterCallback<GeometryChangedEvent>(OnSlideContainerGeometryChanged);
+    }
+
+    private void OnSlideContainerGeometryChanged(GeometryChangedEvent evt)
+    {
+        // Refresh visual on geometry change
+        SetValue(currentValue);
     }
 
     private void OnKnobPointerDown(PointerDownEvent evt)
