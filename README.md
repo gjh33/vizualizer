@@ -34,4 +34,7 @@ First you must install Unity 2021.3.0 LTS. If building for mobile be sure to inc
 # Acknowledgements
 
 [Unity Logo 3D Model - Yanez Designs](https://sketchfab.com/3d-models/unity-logo-a9299dd053cb46a0b2dfcffd378f1088)
+
 [Dwarven Expedition Pack - Tobyfredson](https://assetstore.unity.com/packages/3d/environments/dungeons/dwarven-expedition-pack-154571)
+
+[Icons8.com](https://icons8.com/)
