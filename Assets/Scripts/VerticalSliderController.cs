@@ -60,6 +60,7 @@ public class VerticalSliderController : UIController
 
     private void OnKnobPointerMove(PointerMoveEvent evt)
     {
+        Debug.Log("Move");
         if (dragging)
         {
             OnDragMove(evt.deltaPosition);
@@ -68,6 +69,7 @@ public class VerticalSliderController : UIController
 
     private void OnKnobPointerCaptureOut(PointerCaptureOutEvent evt)
     {
+        Debug.Log("Capture out");
         if (dragging) 
         {
             EndDrag();
@@ -76,12 +78,14 @@ public class VerticalSliderController : UIController
 
     private void BeginDrag()
     {
+        Debug.Log("Begin drag");
         dragging = true;
         knob.CapturePointer(0);
     }
     
     private void EndDrag()
     {
+        Debug.Log("End drag");
         dragging = false;
         knob.ReleasePointer(0);
     }

@@ -104,6 +104,8 @@ public class VisualInterfaceController : UIController
     public VisualInterfaceController(VisualElement rootElement, VisualTreeAsset cardTemplate) : base(rootElement)
     {
         carouselCardTemplate = cardTemplate;
+
+        InitSafeArea();
         
         picker = new PickerController(root.Q<VisualElement>(pickerContainerId), carouselCardTemplate);
         picker.OnMeshSelected += OnPickerMeshSelected;
@@ -399,6 +401,22 @@ public class VisualInterfaceController : UIController
         chromaticAberrationControl.clickable.clicked += OnChromaticAberrationControlClicked;
         filmGrainControl.clickable.clicked += OnFilmGrainControlClicked;
         paniniProjectionControl.clickable.clicked += OnPaniniProjectionControlClicked;
+    }
+
+    private void InitSafeArea()
+    {
+        Vector2 screenTopLeft = new Vector2(Screen.safeArea.xMin, Screen.height - Screen.safeArea.yMax);
+        Vector2 screenBottomRight = new Vector2(Screen.width - Screen.safeArea.xMax, Screen.safeArea.yMin);
+        Vector2 topLeft = RuntimePanelUtils.ScreenToPanel(root.panel, screenTopLeft);
+        Vector2 bottomRight = RuntimePanelUtils.ScreenToPanel(root.panel, screenBottomRight);
+        var safeAreas = root.Query<VisualElement>(className: "safe-area");
+        foreach (var safeArea in safeAreas.ToList())
+        {
+            safeArea.style.marginLeft = topLeft.x;
+            safeArea.style.marginTop = topLeft.y;
+            safeArea.style.marginRight = bottomRight.x;
+            safeArea.style.marginBottom = bottomRight.y;
+        }
     }
 
     private void OnBloomControlClicked()
