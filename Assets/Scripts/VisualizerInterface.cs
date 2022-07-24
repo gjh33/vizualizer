@@ -19,6 +19,12 @@ public class VisualizerInterface : MonoBehaviour
     [SerializeField] private LightController LightController;
     [Tooltip("The effects controller being controlled by the interface")]
     [SerializeField] private EffectsController EffectsController;
+    [Tooltip("The mesh library used to load built in meshes")]
+    [SerializeField] private MeshLibraryAsset MeshLibrary;
+    [Tooltip("The material library used to load built in materials")]
+    [SerializeField] private MaterialLibraryAsset MaterialLibrary;
+    [Tooltip("The texture library used to load built in textures")]
+    [SerializeField] private TextureLibraryAsset TextureLibrary;
     
     [Tooltip("The min light angle for the slider control")]
     [SerializeField] private float MinLightAngle = 0.0f;
@@ -44,7 +50,12 @@ public class VisualizerInterface : MonoBehaviour
 
     private void OnEnable()
     {
-        rootController = new VisualInterfaceController(UserInterface.rootVisualElement, CarouselCardTemplate);
+        rootController = new VisualInterfaceController(
+            UserInterface.rootVisualElement, 
+            CarouselCardTemplate,
+            MeshLibrary,
+            MaterialLibrary,
+            TextureLibrary);
         
         // Delay until geometry is updated
         UserInterface.rootVisualElement.RegisterCallback<GeometryChangedEvent>(OnGeometryChanged);

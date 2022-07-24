@@ -524,7 +524,7 @@ MonoBehaviour:
   RotationSensitivity: 0.5
   ScaleSensitivity: 0.01
   CurrentControlMode: 0
-  CurrentTranslationAxis: 1
+  CurrentTranslationPlane: 1
   CurrentRotationAxis: 1
   CurrentScaleAxis: 3
   ControlsEnabled: 1
@@ -788,6 +788,9 @@ MonoBehaviour:
   DisplayMesh: {fileID: 390904290}
   LightController: {fileID: 410087043}
   EffectsController: {fileID: 832575520}
+  MeshLibrary: {fileID: 11400000, guid: e1ec6e079fb23394fb295c52e44168d8, type: 2}
+  MaterialLibrary: {fileID: 11400000, guid: 0bbcb505183f87f4db6985634f509adc, type: 2}
+  TextureLibrary: {fileID: 11400000, guid: 24d0d622f5fd8834aa307327c0496f90, type: 2}
   MinLightAngle: 0
   MaxLightAngle: 180
   MinLightAzimuth: 0

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using System.IO;
+using Unity.VisualScripting;
 using UnityEditor;
 using UnityEditor.VersionControl;
 using UnityEngine;
@@ -10,25 +11,58 @@ using UnityEngine;
 /// </summary>
 public class AssetPreviewBuildCommand
 {
-    private const string RootPath = "Assets/Resources";
-    private const string OutputPath = "Resources/Preview Images";
-    private const string MeshResourcePath = "Assets/Resources/Meshes";
-    private const string MaterialResourcePath = "Assets/Resources/Materials";
-    private const string TextureResourcePath = "Assets/Resources/Textures";
+    private const string RootPath = "Data/Resource Sources";
+    
+    private static readonly string OutputPath = $"{RootPath}/Preview Images";
+    private static readonly string LibraryOutputPath = "Assets/Data/Resource Libraries";
+    private static readonly string MeshResourcePath = $"Assets/{RootPath}/Meshes";
+    private static readonly string MeshLibraryPath = $"{LibraryOutputPath}/Meshes.asset";
+    private static readonly string MaterialResourcePath = $"Assets/{RootPath}/Materials";
+    private static readonly string MaterialLibraryPath = $"{LibraryOutputPath}/Materials.asset";
+    private static readonly string TextureResourcePath = $"Assets/{RootPath}/Textures";
+    private static readonly string TextureLibraryPath = $"{LibraryOutputPath}/Textures.asset";
     
     [MenuItem("Tools/Build Asset Previews")]
     public static void BuildAssetPreviews()
     {
-        GenerateForPath<Mesh>(MeshResourcePath);
-        GenerateForPath<Material>(MaterialResourcePath);
-        GenerateForPath<Texture2D>(TextureResourcePath);
+        string outputDirectory = Application.dataPath + "/" + OutputPath;
+        
+        // Clear the output directory
+        ClearDirectory(outputDirectory);
+        
+        MeshLibraryAsset meshLib = AssetDatabase.LoadAssetAtPath<MeshLibraryAsset>(MeshLibraryPath);
+        if (meshLib == null)
+        {
+            meshLib = ScriptableObject.CreateInstance<MeshLibraryAsset>();
+            AssetDatabase.CreateAsset(meshLib, MeshLibraryPath);
+        }
+        GenerateForPath(MeshResourcePath, meshLib);
+        
+        MaterialLibraryAsset materialLib = AssetDatabase.LoadAssetAtPath<MaterialLibraryAsset>(MaterialLibraryPath);
+        if (materialLib == null)
+        {
+            materialLib = ScriptableObject.CreateInstance<MaterialLibraryAsset>();
+            AssetDatabase.CreateAsset(materialLib, MaterialLibraryPath);
+        }
+        GenerateForPath(MaterialResourcePath, materialLib);
+        
+        TextureLibraryAsset textureLib = AssetDatabase.LoadAssetAtPath<TextureLibraryAsset>(TextureLibraryPath);
+        if (textureLib == null)
+        {
+            textureLib = ScriptableObject.CreateInstance<TextureLibraryAsset>();
+            AssetDatabase.CreateAsset(textureLib, TextureLibraryPath);
+        }
+        GenerateForPath(TextureResourcePath, textureLib);
+        
         AssetDatabase.SaveAssets();
         AssetDatabase.Refresh();
     }
 
-    private static void GenerateForPath<T>(string path) where T : Object
+    private static void GenerateForPath<T>(string path, ResourceLibraryAsset<T> library) where T : Object
     {
-        var assetGuids = AssetDatabase.FindAssets("", new[] { path });
+        string[] assetGuids = AssetDatabase.FindAssets("", new[] { path });
+        library.Clear();
+
         foreach (string assetGuid in assetGuids)
         {
             string assetPath = AssetDatabase.GUIDToAssetPath(assetGuid);
@@ -46,9 +80,31 @@ public class AssetPreviewBuildCommand
             string outputPath = assetPath.Replace(RootPath, OutputPath);
             outputPath = outputPath.Substring(0, outputPath.LastIndexOf('.'));
             outputPath += ".png";
-            outputPath = Application.dataPath + "/" + outputPath;
+            string assetOutputPath = outputPath;
+            outputPath = Application.dataPath.Replace("Assets","") + outputPath;
+            
+            Directory.CreateDirectory(Path.GetDirectoryName(outputPath));
+            
             byte[] bytes = previewTexture.EncodeToPNG();
             File.WriteAllBytes(outputPath, bytes);
+            AssetDatabase.ImportAsset(assetOutputPath);
+
+            Texture2D previewAsset = AssetDatabase.LoadAssetAtPath<Texture2D>(assetOutputPath);
+            library.AddResource(asset, previewAsset);
+        }
+    }
+    
+    private static void ClearDirectory(string path)
+    {
+        foreach (string file in Directory.EnumerateFiles(path))
+        {
+            File.Delete(file);
+        }
+
+        foreach (var directory in Directory.EnumerateDirectories(path))
+        {
+            ClearDirectory(directory);
+            Directory.Delete(directory);
         }
     }
 }
