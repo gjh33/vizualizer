@@ -4,7 +4,7 @@ Vizualizer is a 3D mesh visualizer for PC, Mac, Linux, iOS, and Android. It was 
 # Usage
 ![image](https://user-images.githubusercontent.com/7050512/180479486-490ae5d5-3985-4c07-9fc7-9fa056ce6de3.png)
 
-1. The top toolbar allows you to choose your mesh, material, and texture. You can mix and match meshes, materials, and textures freely. Selecting any of these will open a carousel style **picker**. In the picker simply scroll left and right to choose your desired asset.
+1. The top toolbar allows you to choose your mesh, material, and texture. You can mix and match meshes, materials, and textures freely. Selecting any of these will open a carousel style **picker**. In the picker simply scroll left and right and then tap on your desired asset.
 2. These are your primary editing controls. In order from top to bottom the controls are
     1. Translation
     2. Rotation
